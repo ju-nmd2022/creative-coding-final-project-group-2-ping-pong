@@ -18,6 +18,8 @@ let isShaking = false; // only for ball in corner
 let shakeAmount = 5;
 let cornerX = 30, cornerY = 30;
 
+let gameStarted = false;
+
 
 function preload() {
   handpose = ml5.handPose({ flipHorizontal: true });
@@ -27,6 +29,7 @@ function preload() {
 
 function setup() {
   createCanvas(640, 480);
+  startTime = millis();
   video = createCapture(VIDEO);
   video.size(640, 480);
   video.hide();
@@ -44,6 +47,19 @@ function setup() {
 
 function draw() {
   background(23, 31, 38); // BACKGROUND
+
+  if (!gameStarted) {
+    if (millis() - startTime > 5000) {
+      gameStarted = true;
+    } else {
+      fill(255);
+      textSize(32);
+      textAlign(CENTER, CENTER);
+      text("Approve your camera!", width / 2, height / 2);
+      return; 
+    }
+  }
+
   let detectedEllipses = [];
 
   let numberOfPeople = poses.length;
