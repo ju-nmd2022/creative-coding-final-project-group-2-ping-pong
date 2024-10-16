@@ -362,3 +362,8 @@ function drawEllipse(centerX, centerY, distance) {
   fill(249, 199, 79); //   fill(0, 0, 255, 150);   FINGER ELLIPSE
   ellipse(centerX, centerY, distance);
 }
+
+
+// Error: Start time must be strictly greater than previous start time 
+// is appearing sometimes. Should be a tonejs problem, but I couldn't fix it yet.
+// sometimes it appears earlier than other times, so for now just restart!
