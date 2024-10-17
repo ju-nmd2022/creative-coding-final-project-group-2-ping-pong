@@ -20,6 +20,8 @@ let cornerX = 30, cornerY = 30; // always same corner it likes only ONE it wasnt
 
 let gameStarted = false;
 
+let easingToCenter = false;
+
 
 
 function preload() {
@@ -86,11 +88,25 @@ function draw() {
     drawZoomedFace();
   }
 
-if (numberOfPeople > 1) {
+  if (numberOfPeople > 1) {
     moveToCornerWithShake();
-  } else {
-    handleBallMovement();
-  }
+    easingToCenter = true; // Set the flag when there are multiple people
+} else {
+    if (easingToCenter) {
+        // try to ease it in the middle, before that code it just vanished??
+        x = lerp(x, 640 / 2, 0.1);
+        y = lerp(y, 480 / 2, 0.1);
+        
+        // Close o center calculation by gpt  ITS A FEATURE NOT A BUG it spawns in the center after it was too scared
+        if (abs(x - 640 / 2) < 1 && abs(y - 480 / 2) < 1) {
+            easingToCenter = false; // Stop easing once it's in the center
+            x = 640 / 2; 
+            y = 480 / 2;
+        }
+    } else {
+        handleBallMovement();
+    }
+}
 }
 
 function gotPoses(results) {
@@ -190,7 +206,7 @@ function adjustBallSpeed(distance) {
   speedX = Math.sign(speedX) * newSpeed;
   speedY = Math.sign(speedY) * newSpeed;
 }
-// face zoom logic (when it happens) 
+// face zoom logic (when it happens) copilot help
 function manageFaceZoom(detectedEllipsesCount) {
   if (detectedEllipsesCount === 0) {
     noEllipseTime += deltaTime;
@@ -208,7 +224,7 @@ function manageFaceZoom(detectedEllipsesCount) {
 }
 
 
-// zoom face
+// zoom face copilot help
 function drawZoomedFace() {
   if (faces.length > 0) {
     let face = faces[0];
