@@ -1,6 +1,6 @@
 let handpose, faceMesh, video;
 let hands = [], faces = []; poses = [];
-let showFace = false, noEllipseTime = 0, faceZoomThreshold = 10000, hasZoomedFace = false;
+let showFace = false, noEllipseTime = 0, faceZoomThreshold, hasZoomedFace = false;
 let pentatonicScale = ["C4", "D4", "E4", "G4", "A4"];
 let synth, darkSynth, noteLoop, isPlaying = false, currentNote = "C4";
 let suppressSound = false, suppressEndTime = 0, darkSoundTriggered = false, isPaused = false;
@@ -31,10 +31,12 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(640, 480); // windowWidth, windowHeight doesnt work because of the facecamm zoom .. 1512, 830 - my window size also...... IDK
+  createCanvas(620, 480); // windowWidth, windowHeight doesnt work because of the facecamm zoom .. 1512, 830 - my window size also...... IDK
+  // createCanvas(windowWidth, windowHeight); // facezoom problem but fullsize
   startTime = millis();
   video = createCapture(VIDEO);
-  video.size(640,480);
+  video.size(620, 480); // innerWidth, innerHeight problems facezoom
+  // video.size(windowWidth, windowHeight); // facezoom problem but fullsize
   video.hide();
  
 
@@ -47,7 +49,7 @@ function setup() {
   Tone.Transport.start();
 
   checkWeekday(getWeekday());
-
+  console.log(faceZoomThreshold + "facezoomthreshold");
 
   
 }
@@ -258,32 +260,40 @@ function checkWeekday(day) {
     case "Monday": 
         ellipseRadius = 60; 
         anger = anger + 30
+        faceZoomThreshold = random(10000,12000); 
         break;
     case "Tuesday": 
         ellipseRadius = 80; 
         anger = anger + 20
+        faceZoomThreshold = random(9000,11000); 
         break;
     case "Wednesday": 
         ellipseRadius = 90;
         anger = anger + 18
+        faceZoomThreshold = random(8000,10000); 
         break;
     case "Thursday": 
         ellipseRadius = 100; 
         anger = anger + 15
+        faceZoomThreshold = random(7000,9000);
         break;
     case "Friday": 
         ellipseRadius = 140;
         anger = anger + 10
+        faceZoomThreshold = random(6000,8000); 
         break;
     case "Saturday": 
         ellipseRadius = 150; 
         anger = anger - 10;
+        faceZoomThreshold = random(5000,7000); 
         break;
     case "Sunday": 
         ellipseRadius = 170;
         anger = anger - 20;
+        faceZoomThreshold = random(4000,6000); 
         break; // ellipseRadius = confidence (maybe it can get less hits)
     default: ellipseRadius = 80;
+            faceZoomThreshold = 6000;
   }
 }
 // weekday js check
