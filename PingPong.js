@@ -16,7 +16,7 @@ let zoomFactor = 5;
 
 let isShaking = false; // only for ball in corner
 let shakeAmount = 5;
-let cornerX = 30, cornerY = 30;
+let cornerX = 30, cornerY = 30; // always same corner it likes only ONE it wasnt because i am lazy
 
 let gameStarted = false;
 
@@ -46,7 +46,7 @@ function setup() {
 }
 
 function draw() {
-  background(23, 31, 38); // BACKGROUND
+  background(23, 31, 38); 
 
   if (!gameStarted) {
     if (millis() - startTime > 5000) {
@@ -88,11 +88,10 @@ if (numberOfPeople > 1) {
   }
 }
 
-
-
-  function gotPoses(results) {
+function gotPoses(results) {
     poses = results;
-  }
+}
+
 // normal synth playing at beginning, after easing and facezoom stop..
 function setupSynths() {
   synth = new Tone.Synth().toDestination();
@@ -137,7 +136,8 @@ function playNoteFromGrid(x, y) {
   let note = pentatonicScale[noteIndex];
   synth.triggerAttackRelease(note, "8n");
 }
-// hand collision ball)
+
+// hand collision ball
 function handleCollisionWithBall(centerX, centerY, distance) {
   let distanceToBall = dist(centerX, centerY, x, y);
   if (distanceToBall < distance / 2 + ellipseRadius / 2) {
@@ -230,6 +230,7 @@ function getFaceCenter(face) {
   }
   return { centerX: 0, centerY: 0 };
 }
+
 // week day check
 function checkWeekday(day) {
   switch (day) {
@@ -286,7 +287,7 @@ function manageEasingAndShake(detectedEllipses) {
   }
 }
 
-// dark sound when easing
+// dark sound when easing I THINK YOU DESTROY MY TONE i hate tonejs
 function manageDarkSoundAndLoop(detectedEllipses) {
   if (detectedEllipses.length >= 2) {
     if (!darkSoundTriggered) {
@@ -303,10 +304,10 @@ function manageDarkSoundAndLoop(detectedEllipses) {
     if (darkSoundTriggered) {
       darkSynth.triggerRelease();
       suppressSound = true;
-      suppressEndTime = millis() + 3000;
+      suppressEndTime = millis() + 3000; // still not working well with surpresstime changes
       darkSoundTriggered = false;
     }
-    speedX = 5;
+    speedX = 5; 
     speedY = 8;
     if (!isPlaying && millis() > suppressEndTime) {
       noteLoop.start();
@@ -342,20 +343,6 @@ function handleBallMovement() {
   ellipse(x, y, ellipseRadius);
 }
 
-// HAND ELLIPSE OUT OF LECTURE
-function calculateHandEllipse(hand) {
-  let indexFinger = hand.index_finger_tip;
-  let thumb = hand.thumb_tip;
-  let centerX = (indexFinger.x + thumb.x) / 2;
-  let centerY = (indexFinger.y + thumb.y) / 2;
-  let distance = dist(indexFinger.x, indexFinger.y, thumb.x, thumb.y);
-
-  if (useAdjustBallSpeed) { //only after facezoom and uneven total hit number 50 %
-    adjustBallSpeed(distance);
-  }
-
-  return { centerX, centerY, distance };
-}
 
 function drawEllipse(centerX, centerY, distance) {
   noStroke();
