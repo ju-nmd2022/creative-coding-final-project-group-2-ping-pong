@@ -21,6 +21,7 @@ let cornerX = 30, cornerY = 30; // always same corner it likes only ONE it wasnt
 let gameStarted = false;
 
 
+
 function preload() {
   handpose = ml5.handPose({ flipHorizontal: true });
   faceMesh = ml5.faceMesh();
@@ -28,11 +29,12 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(640, 480);
+  createCanvas(640, 480); // windowWidth, windowHeight doesnt work because of the facecamm zoom .. 1512, 830 - my window size also...... IDK
   startTime = millis();
   video = createCapture(VIDEO);
-  video.size(640, 480);
+  video.size(640,480);
   video.hide();
+ 
 
   handpose.detectStart(video, getHandsData);
   faceMesh.detectStart(video, getFacesData);
@@ -43,6 +45,9 @@ function setup() {
   Tone.Transport.start();
 
   checkWeekday(getWeekday());
+
+
+  
 }
 
 function draw() {
